@@ -1,0 +1,19 @@
+FROM python:3.11-slim-buster
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y build-essential
+RUN pip3 install --upgrade pip
+
+COPY pyproject.toml poetry.lock ./
+
+RUN pip3 install poetry
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-interaction --no-ansi
+
+COPY ./src .
+
+CMD python3 socket_server.py

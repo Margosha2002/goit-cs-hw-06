@@ -1,0 +1,46 @@
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    networks:
+      - main-network
+    volumes:
+      - ./data:/data/db
+
+
+  http-server:
+    container_name: http-server
+    build:
+      context: .
+      dockerfile: Dockerfile.main
+    networks:
+      - main-network
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+
+  ws-server:
+    container_name: ws-server
+    build:
+      context: .
+      dockerfile: Dockerfile.ws
+    networks:
+      - main-network
+    ports:
+      - 5001:5001
+    depends_on:
+      - mongo
+
+
+networks:
+  main-network:
+    driver: bridge
