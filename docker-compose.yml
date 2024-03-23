@@ -12,8 +12,8 @@ services:
       - 27017:27017
     networks:
       - main-network
-    volumes:
-      - ./data:/data/db
+#    volumes:
+#      - ./data:/data/db
 
 
   http-server:
@@ -25,18 +25,6 @@ services:
       - main-network
     ports:
       - 3000:3000
-    depends_on:
-      - mongo
-
-  ws-server:
-    container_name: ws-server
-    build:
-      context: .
-      dockerfile: Dockerfile.ws
-    networks:
-      - main-network
-    ports:
-      - 5001:5001
     depends_on:
       - mongo
 

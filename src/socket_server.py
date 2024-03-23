@@ -1,4 +1,7 @@
 import asyncio
+from functools import wraps
+from typing import Coroutine, Callable
+
 import websockets
 
 import db
@@ -14,6 +17,15 @@ async def handler(websocket, path):
     await websocket.send(reply)
 
 
+def run_async(func: Callable[..., any]):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        loop = asyncio.new_event_loop()
+        loop.run_until_complete(func(*args, **kwargs))
+    return wrapper
+
+
+@run_async
 async def main():
     await db.init()
     async with websockets.serve(handler, "0.0.0.0", 5001):
@@ -21,4 +33,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

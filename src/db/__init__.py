@@ -11,6 +11,7 @@ __all__: list[str] = [
 ]
 
 client: AsyncIOMotorClient = AsyncIOMotorClient("mongodb://root:example@host.docker.internal:27017/mongo?authSource=admin", uuidRepresentation='standard')
+# client: AsyncIOMotorClient = AsyncIOMotorClient("mongodb://root:example@localhost:27017/mongo?authSource=admin", uuidRepresentation='standard')
 
 db: AgnosticDatabase = client.get_default_database()
 
